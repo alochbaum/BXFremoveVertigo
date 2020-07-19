@@ -14,17 +14,22 @@
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10" />
         </Grid.RowDefinitions>
-        <Label Grid.Row="1" Grid.Column="1">BXF File</Label>
+        <Label Grid.Row="0" Grid.Column="2">Folder To Monitor for BXF Schedules, which move to _Processed subfolder</Label>
+        <Button Grid.Column="1" Grid.Row="1" x:Name="btInDir" Click="btInDir_Click">Select -></Button>
         <TextBox x:Name="tbInFile" Grid.Row="1" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\KCBS-TV_20200611 [20200610 225718234].xml" VerticalAlignment="Top" MinWidth="200"/>
-        <Label Grid.Row="2" Grid.Column="1">Output Folder</Label>
-        <TextBox x:Name="tbOutFolder" Grid.Row="2" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\Out" VerticalAlignment="Top" MinWidth="200"/>
-        <RichTextBox x:Name="rtbStatus" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Button Grid.Column="1" Grid.Row="4" x:Name="btnDoIt" Height="20" VerticalAlignment="Bottom" Click="btnDoIt_Click">Do it</Button>
+        <Label Grid.Row="2" Grid.Column="2">Output Folder where BXF Schedules without Vertigo are saved</Label>
+        <Button Grid.Column="1" Grid.Row="3" x:Name="btOutDir">Select -></Button>
+        <TextBox x:Name="tbOutFolder" Grid.Row="3" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\Out" VerticalAlignment="Top" MinWidth="200"/>
+        <RichTextBox x:Name="rtbStatus" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <Button Grid.Column="1" Grid.Row="6" x:Name="btnDoIt" Height="20" VerticalAlignment="Bottom" Click="btnDoIt_Click">Do it</Button>
     </Grid>
 </Window>

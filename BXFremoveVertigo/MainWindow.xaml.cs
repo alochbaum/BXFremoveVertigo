@@ -66,5 +66,10 @@ namespace BXFremoveVertigo
             }
             rtbStatus.AppendText($"Wrote {iCount} events");
         }
+
+        private void btInDir_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
