@@ -32,6 +32,7 @@ namespace BXFremoveVertigo
         public MainWindow()
         {
             InitializeComponent();
+            this.Title = "Remove Vertigo Events from BXF Schedules vrs" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LoadSettings();
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
