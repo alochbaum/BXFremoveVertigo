@@ -27,6 +27,7 @@ namespace BXFremoveVertigo
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region setup and shutdown
         DispatcherTimer _timer;
         private int iAutoSeconds = 60;
         public MainWindow()
@@ -38,7 +39,23 @@ namespace BXFremoveVertigo
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += timer_Tick;
         }
+        private void LoadSettings()
+        {
+            tbInDir.Text = ConfigurationManager.AppSettings["InDirectory"];
+            tbOutFolder.Text = ConfigurationManager.AppSettings["OutDirectory"];
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
+            config.AppSettings.Settings.Remove("InDirectory");
+            config.AppSettings.Settings.Add("InDirectory", tbInDir.Text);
+            config.AppSettings.Settings.Remove("OutDirectory");
+            config.AppSettings.Settings.Add("OutDirectory", tbOutFolder.Text);
+
+            config.Save(ConfigurationSaveMode.Modified);
+        }
+#endregion
         private string ConvertFile(string strInFile)
         {
             string strReturn = "None";
@@ -147,34 +164,27 @@ namespace BXFremoveVertigo
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
 
-            config.AppSettings.Settings.Remove("InDirectory");
-            config.AppSettings.Settings.Add("InDirectory", tbInDir.Text);
-            config.AppSettings.Settings.Remove("OutDirectory");
-            config.AppSettings.Settings.Add("OutDirectory", tbOutFolder.Text);
-
-            config.Save(ConfigurationSaveMode.Modified);
-        }
-        private void LoadSettings()
-        {
-            tbInDir.Text = ConfigurationManager.AppSettings["InDirectory"];
-            tbOutFolder.Text = ConfigurationManager.AppSettings["OutDirectory"];
-        }
         private async Task DoScan()
         {
             lbStatus.Content = "Scanning Folder Now";
-            DirectoryInfo d = new DirectoryInfo(tbInDir.Text);
-
-            foreach (var file in d.GetFiles("*.xml"))
+            try
             {
-                lbStatus.Content = ($"Found {file.FullName} waiting 3 seconds to process for copy to complete\r");
-                await FileDelay(file.FullName);
-                lbStatus.Content = ($"Processing{file.FullName}");
+                DirectoryInfo d = new DirectoryInfo(tbInDir.Text);
+
+                foreach (var file in d.GetFiles("*.xml"))
+                {
+                    lbStatus.Content = ($"Found {file.FullName} waiting 3 seconds to process for copy to complete\r");
+                    await FileDelay(file.FullName);
+                    lbStatus.Content = ($"Processing{file.FullName}");
+                }
+                if (Directory.GetFiles(tbInDir.Text, "*.xml", SearchOption.TopDirectoryOnly).Length == 0) lbStatus.Content = "No more xml files in the monitor directory";
             }
-            if (Directory.GetFiles(tbInDir.Text, "*.xml", SearchOption.TopDirectoryOnly).Length == 0) lbStatus.Content = "No more xml files in the monitor directory";
+            catch (Exception exc)
+            {
+                lbStatus.Content = $"While Scanning Error: {exc.Message}";
+            }          
+
         }
         private async void btnScanDir_Click(object sender, RoutedEventArgs e)
         {

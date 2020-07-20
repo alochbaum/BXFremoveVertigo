@@ -34,7 +34,14 @@
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="2">Folder To Monitor for BXF Schedules, which move to _Processed subfolder</Label>
-        <Button Grid.Column="1" Grid.Row="1" x:Name="btInDir" Click="btInDir_Click">Select -></Button>
+        <Button Grid.Column="1" Grid.Row="1" x:Name="btInDir" Click="btInDir_Click">Select ->
+            <Button.ToolTip>
+                <TextBlock>
+                    Clicking this brings up a folder selection or creation dialog <LineBreak/>
+                    for monitor folder, and when files are finished converting the <LineBreak/>
+                    original files go in to _Processed subfolder of this directory.
+                </TextBlock>
+            </Button.ToolTip></Button>
         <TextBox x:Name="tbInDir" Grid.Row="1" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\KCBS-TV_20200611 [20200610 225718234].xml" VerticalAlignment="Top" MinWidth="200"/>
         <Label Grid.Row="2" Grid.Column="2">Output Folder where BXF Schedules without Vertigo are saved</Label>
         <Button Grid.Column="1" Grid.Row="3" x:Name="btOutDir" Click="btOutDir_Click">Select -></Button>
@@ -42,8 +49,17 @@
         <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" x:Name="lbStatus" Content="Starting up" HorizontalAlignment="Center"/>
         <RichTextBox x:Name="rtbStatus" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
         <StackPanel  Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2"  Orientation="Horizontal">
-            <Button x:Name="btn1File" Height="20" Click="btn1File_Click">Manually convert a single schedlue</Button>
-            <Button x:Name="btnScanDir" Height="20"  Click="btnScanDir_Click">Scan Monitor Directory Now</Button>
+            <Button x:Name="btn1File" Height="20" Click="btn1File_Click">Manually convert a single schedule
+                <Button.ToolTip>
+                    <TextBlock>Clicking this opens file dialog and allows you to select a schedule <LineBreak />
+                        to convert, coverted file with same name goes to out folder, and the <LineBreak/>
+                        the original file moves to the _Processed subfolder of the Monitored Folder.
+                    </TextBlock></Button.ToolTip>
+            </Button>
+            <Button x:Name="btnScanDir" Height="20"  Click="btnScanDir_Click">Scan Monitor Directory Now
+                <Button.ToolTip>
+                    <TextBlock>Clicking this turns off every minute scanning<LineBreak/>and does a 1 time search of monitor folder for schedules</TextBlock></Button.ToolTip>
+            </Button>
             <CheckBox x:Name="cbAutoScan" Margin="10,5,10,0" Checked="cbAutoScan_Checked" Unchecked="cbAutoScan_Unchecked">Scan Monitor Folder every minute</CheckBox>
             <Label x:Name="lbAuto">(Automatic Scan Off)</Label>
         </StackPanel>
