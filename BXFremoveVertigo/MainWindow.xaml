@@ -5,7 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BXFremoveVertigo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
+    <Window.Resources>
+        <!-- One style for each *type* of control on the window -->
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5,0,5,3"/>
+        </Style>
+        <Style TargetType="RichTextBox">
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10"/>
@@ -19,17 +28,24 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="10" />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="2">Folder To Monitor for BXF Schedules, which move to _Processed subfolder</Label>
         <Button Grid.Column="1" Grid.Row="1" x:Name="btInDir" Click="btInDir_Click">Select -></Button>
-        <TextBox x:Name="tbInFile" Grid.Row="1" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\KCBS-TV_20200611 [20200610 225718234].xml" VerticalAlignment="Top" MinWidth="200"/>
+        <TextBox x:Name="tbInDir" Grid.Row="1" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\KCBS-TV_20200611 [20200610 225718234].xml" VerticalAlignment="Top" MinWidth="200"/>
         <Label Grid.Row="2" Grid.Column="2">Output Folder where BXF Schedules without Vertigo are saved</Label>
-        <Button Grid.Column="1" Grid.Row="3" x:Name="btOutDir">Select -></Button>
+        <Button Grid.Column="1" Grid.Row="3" x:Name="btOutDir" Click="btOutDir_Click">Select -></Button>
         <TextBox x:Name="tbOutFolder" Grid.Row="3" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\Out" VerticalAlignment="Top" MinWidth="200"/>
-        <RichTextBox x:Name="rtbStatus" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Button Grid.Column="1" Grid.Row="6" x:Name="btnDoIt" Height="20" VerticalAlignment="Bottom" Click="btnDoIt_Click">Do it</Button>
+        <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" x:Name="lbStatus" Content="Starting up" HorizontalAlignment="Center"/>
+        <RichTextBox x:Name="rtbStatus" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+        <StackPanel  Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2"  Orientation="Horizontal">
+            <Button x:Name="btn1File" Height="20" Click="btn1File_Click">Manually convert a single schedlue</Button>
+            <Button x:Name="btnScanDir" Height="20"  Click="btnScanDir_Click">Scan Monitor Directory Now</Button>
+            <CheckBox x:Name="cbAutoScan" Margin="10,5,10,0" Checked="cbAutoScan_Checked" Unchecked="cbAutoScan_Unchecked">Scan Monitor Folder every minute</CheckBox>
+            <Label x:Name="lbAuto">(Automatic Scan Off)</Label>
+        </StackPanel>
     </Grid>
 </Window>
