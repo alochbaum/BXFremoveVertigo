@@ -80,7 +80,7 @@ namespace BXFremoveVertigo
                             m_lStr.Clear();
                             iCount++;
                         }
-                        if (line.Contains("Vertigo")) blVertigo = true;
+                        if (line.Contains(">Vertigo")||line.Contains(">VERTIGO")) blVertigo = true;
                         if (line.Contains("</ScheduledEvent"))
                         {
                             blInEvent = false; // note the line with /Schedule is writting in next if statement.
