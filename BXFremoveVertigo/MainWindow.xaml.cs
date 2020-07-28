@@ -33,7 +33,7 @@ namespace BXFremoveVertigo
         public MainWindow()
         {
             InitializeComponent();
-            this.Title = "Remove Vertigo Events from BXF Schedules vrs" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Title = "Remove Vertigo Events, set manual seq to external and 1st event manaul in BXF Schedules vrs" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             LoadSettings();
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
@@ -60,8 +60,7 @@ namespace BXFremoveVertigo
         {
             string strReturn = "None";
             List<string> m_lStr = new List<string>();
-            bool blVertigo = false;
-            bool blInEvent = false;
+            bool blVertigo = false, blInEvent = false, blStartMacro = false, blFirstAfterStart = false, blStartManual = false;
             int iCount = 0;
             string strOutFile = tbOutFolder.Text + @"\" + System.IO.Path.GetFileName(strInFile);
             lbStatus.Content = $"Starting to convert {strInFile} to {strOutFile}";
@@ -80,7 +79,8 @@ namespace BXFremoveVertigo
                             m_lStr.Clear();
                             iCount++;
                         }
-                        if (line.Contains(">Vertigo")||line.Contains(">VERTIGO")) blVertigo = true;
+                        if (AnyCase(line, ">Vertigo")) blVertigo = true;
+                        if (AnyCase(line, ">Sequence:Start<")) blStartMacro = true;
                         if (line.Contains("</ScheduledEvent"))
                         {
                             blInEvent = false; // note the line with /Schedule is writting in next if statement.
@@ -88,8 +88,24 @@ namespace BXFremoveVertigo
                             {
                                 foreach (string strLine in m_lStr)
                                 {
-                                    writer.WriteLine(strLine);
+                                    string strWrite = strLine;
+                                    // checking for Manual Time mode when in sequence start macro
+                                    if (blStartMacro && AnyCase(strLine, ">Manual"))
+                                    {
+                                        blStartManual = true;  // Set next event to manual start if sequence was manual, not fixed, so I'm using this flag
+                                        strWrite = "            <StartMode>External</StartMode>";
+                                    }
+                                    if (blFirstAfterStart && AnyCase(strLine, ">Follow")) strWrite = "            <StartMode>Manual</StartMode>";
+                                    writer.WriteLine(strWrite);
                                 }
+                            }
+                            if (blFirstAfterStart) blFirstAfterStart = false; // finished writing first event after start macro
+                            if (blStartMacro) // finished writing macro start block
+                            {
+                                blStartMacro = false;
+                                // Set next event to manual start if sequence was manual, not fixed
+                                if(blStartManual) blFirstAfterStart = true;
+                                blStartManual = false;
                             }
                         }
                         if (!blInEvent && !blVertigo) writer.WriteLine(line);
@@ -110,6 +126,11 @@ namespace BXFremoveVertigo
             }
             if(strReturn.Length<6) strReturn = $"Wrote {iCount} events to {strOutFile}\r";
             return strReturn;
+        }
+        private bool AnyCase(string strIn, string strCompare)
+        {
+            bool blReturn = strIn.IndexOf(strCompare, StringComparison.OrdinalIgnoreCase) >= 0;
+            return blReturn;
         }
         private void btn1File_Click(object sender, RoutedEventArgs e)
         {
