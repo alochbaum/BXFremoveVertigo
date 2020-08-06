@@ -89,11 +89,15 @@ namespace BXFremoveVertigo
                                 foreach (string strLine in m_lStr)
                                 {
                                     string strWrite = strLine;
-                                    // checking for Manual Time mode when in sequence start macro
-                                    if (blStartMacro && AnyCase(strLine, ">Manual"))
+                                    // in sequence start macro
+                                    if (blStartMacro)
                                     {
-                                        blStartManual = true;  // Set next event to manual start if sequence was manual, not fixed, so I'm using this flag
-                                        strWrite = "            <StartMode>External</StartMode>";
+                                        if (AnyCase(strLine, ">Manual"))
+                                        {
+                                            blStartManual = true;  // Set next event to manual start if sequence was manual, not fixed, so I'm using this flag
+                                            strWrite = "            <StartMode>External</StartMode>";
+                                        }
+                                        if (AnyCase(strLine, ">External")) blStartManual = true;
                                     }
                                     if (blFirstAfterStart && AnyCase(strLine, ">Follow")) strWrite = "            <StartMode>Manual</StartMode>";
                                     writer.WriteLine(strWrite);
@@ -115,9 +119,22 @@ namespace BXFremoveVertigo
                 // Add section to move file
                 string strMove = tbInDir.Text + System.IO.Path.DirectorySeparatorChar + @"_Processed";
                 lbStatus.Content = $"Trying to move {strInFile} to {strMove}";
-                if (!Directory.Exists(strMove)) Directory.CreateDirectory(strMove);
-                strMove += System.IO.Path.DirectorySeparatorChar + System.IO.Path.GetFileName(strInFile);
-                File.Move(strInFile, strMove);
+                try
+                {
+                    if (!Directory.Exists(strMove)) Directory.CreateDirectory(strMove);
+                    strMove += System.IO.Path.DirectorySeparatorChar + System.IO.Path.GetFileName(strInFile);
+                    if (File.Exists(strMove)) 
+                    { 
+                        File.Delete(strMove);
+                        rtbStatus.AppendText($"Deleting duplicate {strMove}");
+                    }
+                    File.Move(strInFile, strMove);
+                }
+                catch (Exception movex)
+                {
+                    rtbStatus.AppendText($"Error: {movex.Message}");
+                    throw;
+                }
                 lbStatus.Content = $"Moved file to {strMove}";
             }
             catch (Exception ex)
