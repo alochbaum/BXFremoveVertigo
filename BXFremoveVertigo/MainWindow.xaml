@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BXFremoveVertigo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
+        Title="MainWindow" Height="550" Width="800" Closing="Window_Closing">
     <Window.Resources>
         <!-- One style for each *type* of control on the window -->
         <Style TargetType="Button">
@@ -13,6 +13,9 @@
         </Style>
         <Style TargetType="RichTextBox">
             <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style TargetType="CheckBox">
+            <Setter Property="Margin" Value="10,5,10,0" />
         </Style>
     </Window.Resources>
     <Grid>
@@ -23,6 +26,7 @@
             <ColumnDefinition Width="10"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -46,9 +50,14 @@
         <Label Grid.Row="2" Grid.Column="2">Output Folder where BXF Schedules without Vertigo are saved</Label>
         <Button Grid.Column="1" Grid.Row="3" x:Name="btOutDir" Click="btOutDir_Click">Select -></Button>
         <TextBox x:Name="tbOutFolder" Grid.Row="3" Grid.Column="2"  TextWrapping="Wrap" Text="C:\example\Out" VerticalAlignment="Top" MinWidth="200"/>
-        <Label Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" x:Name="lbStatus" Content="Starting up" HorizontalAlignment="Center"/>
-        <RichTextBox x:Name="rtbStatus" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
-        <StackPanel  Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2"  Orientation="Horizontal">
+        <StackPanel  Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Center">
+            <CheckBox x:Name="cbNoVertigo" IsChecked="True">Remove Vertigo</CheckBox>
+            <CheckBox x:Name="cbConvert" IsChecked="True">Convert Sequences</CheckBox>
+            <CheckBox x:Name="cbNoBland" IsChecked="True">Remove Blank Macros</CheckBox>
+        </StackPanel>
+        <Label Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" x:Name="lbStatus" Content="Starting up" HorizontalAlignment="Center"/>
+        <RichTextBox x:Name="rtbStatus" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+        <StackPanel  Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2"  Orientation="Horizontal">
             <Button x:Name="btn1File" Height="20" Click="btn1File_Click">Manually convert a single schedule
                 <Button.ToolTip>
                     <TextBlock>Clicking this opens file dialog and allows you to select a schedule <LineBreak />
@@ -60,7 +69,7 @@
                 <Button.ToolTip>
                     <TextBlock>Clicking this turns off every minute scanning<LineBreak/>and does a 1 time search of monitor folder for schedules</TextBlock></Button.ToolTip>
             </Button>
-            <CheckBox x:Name="cbAutoScan" Margin="10,5,10,0" Checked="cbAutoScan_Checked" Unchecked="cbAutoScan_Unchecked">Scan Monitor Folder every minute</CheckBox>
+            <CheckBox x:Name="cbAutoScan" Checked="cbAutoScan_Checked" Unchecked="cbAutoScan_Unchecked">Scan Monitor Folder every minute</CheckBox>
             <Label x:Name="lbAuto">(Automatic Scan Off)</Label>
         </StackPanel>
     </Grid>
