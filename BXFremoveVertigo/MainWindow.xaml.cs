@@ -61,6 +61,7 @@ namespace BXFremoveVertigo
             string strReturn = "None";
             List<string> m_lStr = new List<string>();
             bool blVertigo = false, blInEvent = false, blStartMacro = false, blFirstAfterStart = false, blStartManual = false;
+            bool blNoVertigo = cbNoVertigo.IsChecked ?? false, blConvert = cbConvert.IsChecked ?? false, blNoBlank = cbNoBlank.IsChecked ?? false ;
             int iCount = 0;
             string strOutFile = tbOutFolder.Text + @"\" + System.IO.Path.GetFileName(strInFile);
             lbStatus.Content = $"Starting to convert {strInFile} to {strOutFile}";
@@ -79,8 +80,9 @@ namespace BXFremoveVertigo
                             m_lStr.Clear();
                             iCount++;
                         }
-                        if (AnyCase(line, ">Vertigo")) blVertigo = true;
-                        if (AnyCase(line, ">Sequence:Start<")) blStartMacro = true;
+                        if (blNoVertigo && AnyCase(line, ">Vertigo")) blVertigo = true;
+                        if (blNoBlank && AnyCase(line, "<MacroName></MacroName>")) blVertigo = true;
+                        if (blConvert && AnyCase(line, ">Sequence:Start<")) blStartMacro = true;
                         if (line.Contains("</ScheduledEvent"))
                         {
                             blInEvent = false; // note the line with /Schedule is writting in next if statement.

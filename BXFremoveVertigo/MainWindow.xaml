@@ -53,7 +53,7 @@
         <StackPanel  Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2"  Orientation="Horizontal" HorizontalAlignment="Center">
             <CheckBox x:Name="cbNoVertigo" IsChecked="True">Remove Vertigo</CheckBox>
             <CheckBox x:Name="cbConvert" IsChecked="True">Convert Sequences</CheckBox>
-            <CheckBox x:Name="cbNoBland" IsChecked="True">Remove Blank Macros</CheckBox>
+            <CheckBox x:Name="cbNoBlank" IsChecked="True">Remove Blank Macros</CheckBox>
         </StackPanel>
         <Label Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" x:Name="lbStatus" Content="Starting up" HorizontalAlignment="Center"/>
         <RichTextBox x:Name="rtbStatus" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
